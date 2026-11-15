@@ -42,7 +42,7 @@ fn main() {
     let mut city_map = HashMap::<String, City>::new();
 
     let file = File::open("../data/measurements.txt").unwrap();
-    let lines = BufReader::new(file).lines();
+    let lines = BufReader::with_capacity(1024 * 1024 * 1024, file).lines();
 
     for line in lines {
         let line = line.unwrap();
