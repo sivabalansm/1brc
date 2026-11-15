@@ -55,14 +55,6 @@ fn main() {
             .and_modify(| city_obj | { city_obj.add(temp); })
             .or_insert(City::new(temp));
 
-        /*
-        if !city_map.contains_key(city) {
-            city_map.insert(city.to_string(), City::new(temp));
-        } else {
-            let city_obj = city_map.get_mut(city).unwrap();
-            city_obj.add(temp);
-        }
-        */
     }
 
     let mut sorted : Vec<_> = city_map.iter().collect();
