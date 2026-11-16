@@ -39,10 +39,10 @@ impl fmt::Display for City {
 
 
 fn main() {
-    let mut city_map = HashMap::<String, City>::new();
+    let mut city_map = HashMap::<String, (f32, f32, f32, u32)>::new();
 
     let file = File::open("../data/measurements.txt").unwrap();
-    let lines = BufReader::new(file).lines();
+    let lines = BufReader::with_capacity(1024 * 1024, file).lines();
 
     for line in lines {
         let line = line.unwrap();
@@ -50,9 +50,18 @@ fn main() {
         let (city, temp) = line.split_once(';').unwrap();
         let temp : f32 = temp.parse().unwrap();
 
-        city_map.entry(city.into())
-            .and_modify(| city_obj | { city_obj.add(temp); })
-            .or_insert(City::new(temp));
+        match city_map.get_mut(city) {
+            Some(city_obj) => {
+                if city_obj.0 > temp {
+                    city_obj.0 = temp;
+                } else if city_obj.1 < temp {
+                    city_obj.1 = temp;
+                }
+                city_obj.2 += temp;
+                city_obj.3 += 1;
+            },
+            None => { city_map.insert(city.into(), (temp, temp, temp, 1)); },
+        }
 
     }
 
@@ -61,8 +70,8 @@ fn main() {
 
     print!("{{");
     for (city_name, city_obj) in sorted[..sorted.len() - 1].iter() {
-        print!("{city_name}={city_obj}, ");
+        print!("{city_name}={:.1}/{:.1}/{:.1}, ", city_obj.0, city_obj.2/city_obj.3 as f32, city_obj.1);
     }
-    let (last_city, last_city_obj) = sorted.last().unwrap();
-    print!("{last_city}={last_city_obj}}}")
+    let (last_city, city_obj) = sorted.last().unwrap();
+    print!("{last_city}={:.1}/{:.1}/{:.1}, ", city_obj.0, city_obj.2/city_obj.3 as f32, city_obj.1);
 }
