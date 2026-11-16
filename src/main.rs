@@ -6,17 +6,17 @@ use std::collections::HashMap;
 struct City {
     min : f32,
     max : f32,
-    total : f64,
+    total : f32,
     count : u32,
 }
 
 impl City {
     fn new(val: f32) -> Self {
-        Self { min: val, max: val, total: val as f64, count: 1 }
+        Self { min: val, max: val, total: val, count: 1 }
     }
 
-    pub fn mean(&self) -> f64 {
-        self.total / self.count as f64
+    pub fn mean(&self) -> f32 {
+        self.total / self.count as f32
     }
 
     pub fn add(&mut self, val : f32) {
@@ -25,7 +25,7 @@ impl City {
         } else if val > self.max {
             self.max = val;
         }
-        self.total += val as f64;
+        self.total += val;
         self.count += 1;
     }
 
@@ -42,13 +42,12 @@ fn main() {
     let mut city_map = HashMap::<String, City>::new();
 
     let file = File::open("../data/measurements.txt").unwrap();
-    let lines = BufReader::with_capacity(1024 * 1024 * 1024, file).lines();
+    let lines = BufReader::new(file).lines();
 
     for line in lines {
         let line = line.unwrap();
 
         let (city, temp) = line.split_once(';').unwrap();
-        // let city = line_iter.next().unwrap();
         let temp : f32 = temp.parse().unwrap();
 
         city_map.entry(city.into())
