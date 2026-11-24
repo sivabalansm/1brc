@@ -37,6 +37,20 @@ impl fmt::Display for City {
     }
 }
 
+fn convert_float(buf : &[u8]) -> f32 {
+    let is_negative = buf[0] == 45;
+    if is_negative {
+        -(buf[1..buf.len() - 2]
+            .iter()
+            .map( | val | val - 48)
+            .fold(0, | acc, x | acc * 10 + x) as f32 + ((buf[buf.len() - 1] - 48) as f32 / 10.0))
+    } else {
+        buf[..buf.len() - 2]
+            .iter()
+            .map( | val | val - 48)
+            .fold(0, | acc, x | acc * 10 + x) as f32 + ((buf[buf.len() - 1] - 48) as f32 / 10.0)
+    }
+}
 
 fn main() {
     let mut city_map = HashMap::<String, City>::new();
@@ -59,9 +73,12 @@ fn main() {
 
         city.pop();
         temp.pop();
+        // println!("{:?}", temp);
         let city_str = unsafe { str::from_utf8_unchecked(&city) };
-        let temp_str = unsafe { str::from_utf8_unchecked(&temp) };
-        let temp : f32 = temp_str.parse().unwrap();
+        // let temp_str = unsafe { str::from_utf8_unchecked(&temp) };
+        // println!("{:?}", temp_str);
+        // println!("converted myself {}", convert_float(&temp));
+        let temp : f32 = convert_float(&temp);
 
         match city_map.get_mut(city_str) {
             Some(city_obj) => { city_obj.add(temp) },
