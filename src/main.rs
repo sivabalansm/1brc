@@ -42,20 +42,31 @@ fn main() {
     let mut city_map = HashMap::<String, City>::new();
 
     let file = File::open("../data/measurements.txt").unwrap();
-    let lines = BufReader::with_capacity(1024 * 1024, file).lines();
+    let mut bufreader = BufReader::with_capacity(1024 * 1024, file);
 
-    for line in lines {
-        let line = line.unwrap();
+    let mut city = vec![];
+    let mut temp = vec![];
+    loop {
+        city.clear();
+        temp.clear();
 
-        let (city, temp) = line.split_once(';').unwrap();
-        let temp : f32 = temp.parse().unwrap();
+        let r1 = bufreader.read_until(b';', &mut city).unwrap();
+        let r2 = bufreader.read_until(b'\n', &mut temp).unwrap();
 
-        match city_map.get_mut(city) {
-
-            Some(city_obj) => { city_obj.add(temp) },
-            None => { city_map.insert(city.into(), City::new(temp)); },
+        if r1 == 0 || r2 == 0 {
+            break;
         }
 
+        city.pop();
+        temp.pop();
+        let city_str = unsafe { str::from_utf8_unchecked(&city) };
+        let temp_str = unsafe { str::from_utf8_unchecked(&temp) };
+        let temp : f32 = temp_str.parse().unwrap();
+
+        match city_map.get_mut(city_str) {
+            Some(city_obj) => { city_obj.add(temp) },
+            None => { city_map.insert(String::from(city_str), City::new(temp)); },
+        }
     }
 
     let mut sorted : Vec<_> = city_map.iter().collect();
