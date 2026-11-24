@@ -71,13 +71,10 @@ fn main() {
             break;
         }
 
-        city.pop();
-        temp.pop();
-        // println!("{:?}", temp);
+        city.pop(); // remove ';'
+        temp.pop(); // remove '\n'
+
         let city_str = unsafe { str::from_utf8_unchecked(&city) };
-        // let temp_str = unsafe { str::from_utf8_unchecked(&temp) };
-        // println!("{:?}", temp_str);
-        // println!("converted myself {}", convert_float(&temp));
         let temp : f32 = convert_float(&temp);
 
         match city_map.get_mut(city_str) {
