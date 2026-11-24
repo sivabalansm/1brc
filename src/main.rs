@@ -60,6 +60,7 @@ fn main() {
 
     let mut city = vec![];
     let mut temp = vec![];
+    // let mut count : u32 = 0;
     loop {
         city.clear();
         temp.clear();
@@ -76,9 +77,9 @@ fn main() {
 
         let city_str = unsafe { str::from_utf8_unchecked(&city) };
         let temp : f32 = convert_float(&temp);
-
+        
         match city_map.get_mut(city_str) {
-            Some(city_obj) => { city_obj.add(temp) },
+            Some(city_obj) => { city_obj.add(temp); },
             None => { city_map.insert(String::from(city_str), City::new(temp)); },
         }
     }
@@ -86,10 +87,10 @@ fn main() {
     let mut sorted : Vec<_> = city_map.iter().collect();
     sorted.sort_unstable_by_key(| a | a.0);
 
-    print!("{{");
+    print!("{{ ");
     for (city_name, city_obj) in sorted[..sorted.len() - 1].iter() {
-        print!("{city_name}={city_obj}");
+        print!("{city_name}={city_obj}, ");
     }
     let (last_city, city_obj) = sorted.last().unwrap();
-    print!("{last_city}={city_obj}");
+    print!("{last_city}={city_obj}}}");
 }

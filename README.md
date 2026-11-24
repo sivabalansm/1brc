@@ -1,7 +1,7 @@
 # 1brc
 Parse 1 billion rows as fast as possible
 
-## ideas
+## Ideas
 - ~~BufReader increase capacity~~ marginal speed improved, doesn't do anything
     - ~~rational: less system calls, more stored in memory, less time spend doing sys calls~~
 - ~~Implement my own parse for floats, built in parse has a lot of overhead~~ shavedsome time w this!!
@@ -12,3 +12,5 @@ Parse 1 billion rows as fast as possible
 - ~~Replacement for lines?~~
     - ~~sus that lines read reads until \n and returns after, could just read directly till \n~~ replaced with read_until ';' and until '\n' after
 
+## Notes
+- Don't run the program if you computer is in low power mode
