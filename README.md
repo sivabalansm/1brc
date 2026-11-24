@@ -12,6 +12,6 @@ Parse 1 billion rows as fast as possible
 - ~~Don't use structs, avoid struct overhead, use tuple instead?~~ Not true, structs same speed, if not faster
 - BTreeMap instead of sort?
     - look into how it works
-- Replacement for lines?
-    - sus that lines read reads until \n and returns after, could just read directly till \n
+- ~~Replacement for lines?~~
+    - ~~sus that lines read reads until \n and returns after, could just read directly till \n~~ replaced with read_until ';' and until '\n' after
 
