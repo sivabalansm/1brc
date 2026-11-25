@@ -1,5 +1,5 @@
 use core::fmt;
-use ahash::AHashMap;
+use rapidhash::RapidHashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -53,7 +53,7 @@ fn convert_float(buf : &[u8]) -> f32 {
 }
 
 fn main() {
-    let mut city_map = AHashMap::<String, City>::new();
+    let mut city_map = RapidHashMap::<String, City>::default();
 
     let file = File::open("../data/measurements.txt").unwrap();
     let mut bufreader = BufReader::with_capacity(1024 * 1024, file);
