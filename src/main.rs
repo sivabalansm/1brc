@@ -1,7 +1,7 @@
 use core::fmt;
+use ahash::AHashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::collections::HashMap;
 
 struct City {
     min : f32,
@@ -53,7 +53,7 @@ fn convert_float(buf : &[u8]) -> f32 {
 }
 
 fn main() {
-    let mut city_map = HashMap::<String, City>::new();
+    let mut city_map = AHashMap::<String, City>::new();
 
     let file = File::open("../data/measurements.txt").unwrap();
     let mut bufreader = BufReader::with_capacity(1024 * 1024, file);
